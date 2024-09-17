@@ -4,8 +4,7 @@
 ![influxdb](https://img.shields.io/badge/InfluxDB-1.6.7-brightgreen)
 
 # Open-Source LoRaWAN System using SDR
-This repository contains our project's code, configuration files, and documentation. We developed an open-source LoRaWAN system using a Software-Defined Radio (SDR) communicating with traditional Commercial-Off-The-Shelf (COTS) end nodes. Using GNURadio with [gr-lora_sdr](https://github.com/tapparelj/gr-lora_sdr) LoRa transceiver to accomplish the physical layer. This project was carried out by students at the University of Agder (UiA).
-
+Open Source LoRaWAN project, developed originally by two previous students: https://github.com/Stianje/gr-lorawan_sdr/ 
 ![Diagram](https://github.com/Stianje/gr-lorawan_sdr/assets/119126968/d1ad6958-8528-4efe-887d-7faff8b2579b)
 
 
@@ -45,4 +44,4 @@ Performed on a limited dataset:
 
 ### Acknowledgments
 https://github.com/tapparelj/gr-lora_sdr
-
+https://github.com/Stianje/gr-lorawan_sdr/
