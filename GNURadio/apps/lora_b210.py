@@ -467,8 +467,8 @@ class lora_b210(gr.top_block, Qt.QWidget):
         self.analog_sig_source_x_0_0.set_sampling_freq(self.samp_rate)
         self.analog_sig_source_x_0_1.set_sampling_freq(self.samp_rate)
         self.uhd_usrp_sink_0.set_samp_rate(self.samp_rate)
-        self.uhd_usrp_source_0.set_samp_rate(self.samp_rate)
         self.uhd_usrp_sink_0_0.set_samp_rate(self.samp_rate)
+        self.uhd_usrp_source_0.set_samp_rate(self.samp_rate)
 
     def get_pay_len(self):
         return self.pay_len
@@ -508,8 +508,8 @@ class lora_b210(gr.top_block, Qt.QWidget):
         self.qtgui_freq_sink_x_0_1.set_frequency_range(self.center_freq, 2000000)
         self.qtgui_waterfall_sink_x_0.set_frequency_range(self.center_freq, 2000000)
         self.uhd_usrp_sink_0.set_center_freq(self.center_freq, 0)
-        self.uhd_usrp_source_0.set_center_freq(self.center_freq, 0)
         self.uhd_usrp_sink_0_0.set_center_freq(self.center_freq, 0)
+        self.uhd_usrp_source_0.set_center_freq(self.center_freq, 0)
 
     def get_bw(self):
         return self.bw
