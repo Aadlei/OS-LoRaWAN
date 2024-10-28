@@ -93,7 +93,7 @@ def send_message_lora(phyPayload, delay, frequency, spreadingfactor):
     print(f"{bcolors.WARNING}	Delay: {bcolors.ENDC}{delay:.4f}{bcolors.WARNING} - Frequency: {bcolors.ENDC}{frequency}{bcolors.WARNING} - SF: {bcolors.ENDC}{spreadingfactor}")
 
 # Mqtt from ChirpStack
-def on_connect(client, userdata, flags, rc, properties):
+def on_connect(client, userdata, flags, rc):
     if rc == 0:
         print(f"{bcolors.OKGREEN} Connected to broker{bcolors.ENDC}")
         global Connected
@@ -258,7 +258,7 @@ def listener6():
 
 Connected = False
 
-broker = "localhost"
+broker_address = "localhost"
 port = 1883
 topic = "+/gateway/+/command/down"
 client_id = "Python"
@@ -266,7 +266,7 @@ username = ""
 password = ""
 
 client = mqttClient.Client(client_id=client_id)
-client.username_pw_set(user, password=password)    #set username and password
+client.username_pw_set(username, password=password)    #set username and password
 client.on_connect= on_connect                      #attach function to callback
 client.on_message= on_message                      #attach function to callback
 
@@ -292,4 +292,3 @@ t3.start()
 t4.start()
 t5.start()
 t6.start()
-
