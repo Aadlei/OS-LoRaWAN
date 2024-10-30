@@ -129,7 +129,7 @@ def on_message(client, userdata, message):
     deconstruct_message(message.payload)
 
 # Function to send packet to network
-def send_packet_nettwork(data, freq, sf):
+def send_packet_network(data, freq, sf):
     if Debug_Console:
         logging.debug('Starting')
 
@@ -145,7 +145,7 @@ def send_packet_nettwork(data, freq, sf):
     PUSH_DATA_IDENTIFIER = 0x00
 
     # Gateway EUI64 ID
-    GATEWAY_EUI64 = "caf773d6ba73c1e5"
+    GATEWAY_EUI64 = "5680ea3344aeda16"
 
     # Get localtime with ISO 8601 format
     obj = time.localtime()
@@ -176,7 +176,7 @@ def send_packet_nettwork(data, freq, sf):
 
     # Send the packet to the server
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
-        s.sendto(packet, ('localhost', 1700))
+        s.sendto(packet, ("10.225.150.112", 1700))
     # Print out some information about the packet being sent
     print(f"{bcolors.OKBLUE}\nSending packet to Network Server{bcolors.ENDC}")
     print(f"{bcolors.WARNING}	Base64 Data: {bcolors.ENDC}", base64_data)
@@ -193,7 +193,7 @@ def listener1():
         freq = 868.100000
         sf = 12
         Count_1 = time.perf_counter_ns()
-        process_thread = threading.Thread(target=send_packet_nettwork, args=(data, freq, sf))
+        process_thread = threading.Thread(target=send_packet_network, args=(data, freq, sf))
         process_thread.start()
 
 def listener2():
@@ -205,7 +205,7 @@ def listener2():
         freq = 868.100000
         sf = 7
         Count_2 = time.perf_counter_ns()
-        process_thread = threading.Thread(target=send_packet_nettwork, args=(data, freq, sf))
+        process_thread = threading.Thread(target=send_packet_network, args=(data, freq, sf))
         process_thread.start()
 
 def listener3():
@@ -217,7 +217,7 @@ def listener3():
         freq = 868.300000
         sf = 12
         Count_3 = time.perf_counter_ns()
-        process_thread = threading.Thread(target=send_packet_nettwork, args=(data, freq, sf))
+        process_thread = threading.Thread(target=send_packet_network, args=(data, freq, sf))
         process_thread.start()
 
 def listener4():
@@ -229,7 +229,7 @@ def listener4():
         freq = 868.300000
         sf = 7
         Count_4 = time.perf_counter_ns()
-        process_thread = threading.Thread(target=send_packet_nettwork, args=(data, freq, sf))
+        process_thread = threading.Thread(target=send_packet_network, args=(data, freq, sf))
         process_thread.start()
 
 def listener5():
@@ -241,7 +241,7 @@ def listener5():
         freq = 868.500000
         sf = 12
         Count_5 = time.perf_counter_ns()
-        process_thread = threading.Thread(target=send_packet_nettwork, args=(data, freq, sf))
+        process_thread = threading.Thread(target=send_packet_network, args=(data, freq, sf))
         process_thread.start()
 
 def listener6():
@@ -253,15 +253,15 @@ def listener6():
         freq = 868.500000
         sf = 7
         Count_6 = time.perf_counter_ns()
-        process_thread = threading.Thread(target=send_packet_nettwork, args=(data, freq, sf))
+        process_thread = threading.Thread(target=send_packet_network, args=(data, freq, sf))
         process_thread.start()
 
 Connected = False
 
-broker_address = "localhost"
+broker_address = "10.225.150.112"
 port = 1883
 topic = "+/gateway/+/command/down"
-client_id = "Python"
+client_id = "SDR"
 username = ""
 password = ""
 
