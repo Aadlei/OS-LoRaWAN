@@ -61,7 +61,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: '868100000.0'
+    value: '868100000'
   states:
     bus_sink: false
     bus_source: false
@@ -121,7 +121,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: '2000000'
+    value: 2e6
   states:
     bus_sink: false
     bus_source: false
@@ -424,7 +424,7 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
     output_crc_check: 'False'
-    print_rx_msg: '1'
+    print_rx_msg: '2'
   states:
     bus_sink: false
     bus_source: false
@@ -441,7 +441,7 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
     output_crc_check: 'False'
-    print_rx_msg: '1'
+    print_rx_msg: '2'
   states:
     bus_sink: false
     bus_source: false
@@ -458,7 +458,7 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
     output_crc_check: 'False'
-    print_rx_msg: '1'
+    print_rx_msg: '2'
   states:
     bus_sink: false
     bus_source: false
@@ -475,7 +475,7 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
     output_crc_check: 'False'
-    print_rx_msg: '1'
+    print_rx_msg: '2'
   states:
     bus_sink: false
     bus_source: false
@@ -492,7 +492,7 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
     output_crc_check: 'False'
-    print_rx_msg: '1'
+    print_rx_msg: '2'
   states:
     bus_sink: false
     bus_source: false
@@ -509,7 +509,7 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
     output_crc_check: 'False'
-    print_rx_msg: '1'
+    print_rx_msg: '2'
   states:
     bus_sink: false
     bus_source: false
@@ -811,7 +811,7 @@ blocks:
     affinity: ''
     alias: ''
     bandwidth: '125000'
-    center_freq: '868000000'
+    center_freq: center_freq
     comment: ''
     impl_head: impl_head
     maxoutbuf: '0'
@@ -834,7 +834,7 @@ blocks:
     affinity: ''
     alias: ''
     bandwidth: bw
-    center_freq: '868000000'
+    center_freq: center_freq
     comment: ''
     impl_head: impl_head
     maxoutbuf: '0'
@@ -857,7 +857,7 @@ blocks:
     affinity: ''
     alias: ''
     bandwidth: bw
-    center_freq: '868000000'
+    center_freq: center_freq
     comment: ''
     impl_head: impl_head
     maxoutbuf: '0'
@@ -880,7 +880,7 @@ blocks:
     affinity: ''
     alias: ''
     bandwidth: bw
-    center_freq: '868000000'
+    center_freq: center_freq
     comment: ''
     impl_head: impl_head
     maxoutbuf: '0'
@@ -903,7 +903,7 @@ blocks:
     affinity: ''
     alias: ''
     bandwidth: bw
-    center_freq: '868000000'
+    center_freq: center_freq
     comment: ''
     impl_head: impl_head
     maxoutbuf: '0'
@@ -926,7 +926,7 @@ blocks:
     affinity: ''
     alias: ''
     bandwidth: '125000'
-    center_freq: '868000000'
+    center_freq: center_freq
     comment: ''
     impl_head: impl_head
     maxoutbuf: '0'
@@ -1412,7 +1412,7 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
     preamb_len: '8'
-    samp_rate: '2000000'
+    samp_rate: '500000'
     sf: sink_sf2
     sync_words: '0x34'
   states:
@@ -1433,7 +1433,7 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
     preamb_len: '8'
-    samp_rate: '2000000'
+    samp_rate: '500000'
     sf: sf
     sync_words: '0x34'
   states:
@@ -2950,7 +2950,7 @@ blocks:
     comment: ''
     dev_addr: '""'
     dev_args: ''
-    gain0: '10'
+    gain0: '40'
     gain1: '0'
     gain10: '0'
     gain11: '0'
@@ -3084,7 +3084,7 @@ blocks:
     nchan: '1'
     num_mboards: '1'
     otw: ''
-    samp_rate: samp_rate
+    samp_rate: '500000'
     sd_spec0: ''
     sd_spec1: ''
     sd_spec2: ''
@@ -3111,7 +3111,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2608, 272.0]
+    coordinate: [2600, 336.0]
     rotation: 0
     state: enabled
 - name: uhd_usrp_sink_0_0
@@ -3227,7 +3227,7 @@ blocks:
     comment: ''
     dev_addr: '""'
     dev_args: ''
-    gain0: '10'
+    gain0: '40'
     gain1: '0'
     gain10: '0'
     gain11: '0'
@@ -3361,7 +3361,7 @@ blocks:
     nchan: '1'
     num_mboards: '1'
     otw: ''
-    samp_rate: samp_rate
+    samp_rate: '500000'
     sd_spec0: ''
     sd_spec1: ''
     sd_spec2: ''
@@ -3568,7 +3568,7 @@ blocks:
     dc_offs_enb9: default
     dev_addr: '""'
     dev_args: ''
-    gain0: '10'
+    gain0: '40'
     gain1: '0'
     gain10: '0'
     gain11: '0'

@@ -73,12 +73,12 @@ class lora_b210(gr.top_block, Qt.QWidget):
         self.sink_sf2 = sink_sf2 = 7
         self.sink_freq2 = sink_freq2 = 868100000
         self.sf = sf = 12
-        self.samp_rate = samp_rate = 2000000
+        self.samp_rate = samp_rate = 2e6
         self.pay_len = pay_len = 11
         self.impl_head = impl_head = False
         self.has_crc = has_crc = False
         self.cr = cr = 1
-        self.center_freq = center_freq = 868100000.0
+        self.center_freq = center_freq = 868100000
         self.bw = bw = 125000
         self.bandwidth = bandwidth = 2e6
 
@@ -113,7 +113,7 @@ class lora_b210(gr.top_block, Qt.QWidget):
         self.uhd_usrp_source_0.set_center_freq(center_freq, 0)
         self.uhd_usrp_source_0.set_antenna("TX/RX", 0)
         self.uhd_usrp_source_0.set_bandwidth(bandwidth, 0)
-        self.uhd_usrp_source_0.set_gain(10, 0)
+        self.uhd_usrp_source_0.set_gain(40, 0)
         self.uhd_usrp_sink_0_0 = uhd.usrp_sink(
             ",".join(("", '')),
             uhd.stream_args(
@@ -123,13 +123,13 @@ class lora_b210(gr.top_block, Qt.QWidget):
             ),
             "",
         )
-        self.uhd_usrp_sink_0_0.set_samp_rate(samp_rate)
+        self.uhd_usrp_sink_0_0.set_samp_rate(500000)
         self.uhd_usrp_sink_0_0.set_time_unknown_pps(uhd.time_spec(0))
 
         self.uhd_usrp_sink_0_0.set_center_freq(center_freq, 0)
         self.uhd_usrp_sink_0_0.set_antenna("TX/RX", 0)
         self.uhd_usrp_sink_0_0.set_bandwidth(125e3, 0)
-        self.uhd_usrp_sink_0_0.set_gain(10, 0)
+        self.uhd_usrp_sink_0_0.set_gain(40, 0)
         self.uhd_usrp_sink_0 = uhd.usrp_sink(
             ",".join(("", '')),
             uhd.stream_args(
@@ -139,13 +139,13 @@ class lora_b210(gr.top_block, Qt.QWidget):
             ),
             "",
         )
-        self.uhd_usrp_sink_0.set_samp_rate(samp_rate)
+        self.uhd_usrp_sink_0.set_samp_rate(500000)
         self.uhd_usrp_sink_0.set_time_unknown_pps(uhd.time_spec(0))
 
         self.uhd_usrp_sink_0.set_center_freq(center_freq, 0)
         self.uhd_usrp_sink_0.set_antenna("TX/RX", 0)
         self.uhd_usrp_sink_0.set_bandwidth(125e3, 0)
-        self.uhd_usrp_sink_0.set_gain(10, 0)
+        self.uhd_usrp_sink_0.set_gain(40, 0)
         self.qtgui_waterfall_sink_x_0 = qtgui.waterfall_sink_c(
             1024, #size
             window.WIN_BLACKMAN_hARRIS, #wintype
@@ -255,8 +255,8 @@ class lora_b210(gr.top_block, Qt.QWidget):
         self.low_pass_filter_0.set_min_output_buffer(65568)
         self.lora_sdr_whitening_0_0 = lora_sdr.whitening(True,False,',','packet_len')
         self.lora_sdr_whitening_0 = lora_sdr.whitening(True,False,',','packet_len')
-        self.lora_sdr_modulate_0_0 = lora_sdr.modulate(sf, 2000000, bw, [0x34], (int(20*2**sf*samp_rate/bw)),8)
-        self.lora_sdr_modulate_0 = lora_sdr.modulate(sink_sf2, 2000000, bw, [0x34], (int(20*2**sink_sf2*samp_rate/bw)),8)
+        self.lora_sdr_modulate_0_0 = lora_sdr.modulate(sf, 500000, bw, [0x34], (int(20*2**sf*samp_rate/bw)),8)
+        self.lora_sdr_modulate_0 = lora_sdr.modulate(sink_sf2, 500000, bw, [0x34], (int(20*2**sink_sf2*samp_rate/bw)),8)
         self.lora_sdr_interleaver_0_0 = lora_sdr.interleaver(cr, sf, 2, bw)
         self.lora_sdr_interleaver_0 = lora_sdr.interleaver(cr, sink_sf2, 2, bw)
         self.lora_sdr_header_decoder_0_1 = lora_sdr.header_decoder(impl_head, 3, 255, False, 2, False)
@@ -283,12 +283,12 @@ class lora_b210(gr.top_block, Qt.QWidget):
         self.lora_sdr_gray_mapping_0 = lora_sdr.gray_mapping( soft_decoding)
         self.lora_sdr_gray_demap_0_0 = lora_sdr.gray_demap(sf)
         self.lora_sdr_gray_demap_0 = lora_sdr.gray_demap(sink_sf2)
-        self.lora_sdr_frame_sync_0_1 = lora_sdr.frame_sync(868000000, 125000, 7, impl_head, [0x34], 16,8)
-        self.lora_sdr_frame_sync_0_0_1 = lora_sdr.frame_sync(868000000, bw, 7, impl_head, [0x34], 16,8)
-        self.lora_sdr_frame_sync_0_0_0_0 = lora_sdr.frame_sync(868000000, bw, 12, impl_head, [0x34], 16,8)
-        self.lora_sdr_frame_sync_0_0_0 = lora_sdr.frame_sync(868000000, bw, 7, impl_head, [0x34], 16,8)
-        self.lora_sdr_frame_sync_0_0 = lora_sdr.frame_sync(868000000, bw, 12, impl_head, [0x34], 16,8)
-        self.lora_sdr_frame_sync_0 = lora_sdr.frame_sync(868000000, 125000, 12, impl_head, [0x34], 16,8)
+        self.lora_sdr_frame_sync_0_1 = lora_sdr.frame_sync(center_freq, 125000, 7, impl_head, [0x34], 16,8)
+        self.lora_sdr_frame_sync_0_0_1 = lora_sdr.frame_sync(center_freq, bw, 7, impl_head, [0x34], 16,8)
+        self.lora_sdr_frame_sync_0_0_0_0 = lora_sdr.frame_sync(center_freq, bw, 12, impl_head, [0x34], 16,8)
+        self.lora_sdr_frame_sync_0_0_0 = lora_sdr.frame_sync(center_freq, bw, 7, impl_head, [0x34], 16,8)
+        self.lora_sdr_frame_sync_0_0 = lora_sdr.frame_sync(center_freq, bw, 12, impl_head, [0x34], 16,8)
+        self.lora_sdr_frame_sync_0 = lora_sdr.frame_sync(center_freq, 125000, 12, impl_head, [0x34], 16,8)
         self.lora_sdr_fft_demod_0_1 = lora_sdr.fft_demod( soft_decoding, True)
         self.lora_sdr_fft_demod_0_0_1 = lora_sdr.fft_demod( soft_decoding, True)
         self.lora_sdr_fft_demod_0_0_0_0 = lora_sdr.fft_demod( soft_decoding, True)
@@ -307,12 +307,12 @@ class lora_b210(gr.top_block, Qt.QWidget):
         self.lora_sdr_deinterleaver_0_0_0 = lora_sdr.deinterleaver( soft_decoding)
         self.lora_sdr_deinterleaver_0_0 = lora_sdr.deinterleaver( soft_decoding)
         self.lora_sdr_deinterleaver_0 = lora_sdr.deinterleaver( soft_decoding)
-        self.lora_sdr_crc_verif_0_1 = lora_sdr.crc_verif( 1, False)
-        self.lora_sdr_crc_verif_0_0_1 = lora_sdr.crc_verif( 1, False)
-        self.lora_sdr_crc_verif_0_0_0_0 = lora_sdr.crc_verif( 1, False)
-        self.lora_sdr_crc_verif_0_0_0 = lora_sdr.crc_verif( 1, False)
-        self.lora_sdr_crc_verif_0_0 = lora_sdr.crc_verif( 1, False)
-        self.lora_sdr_crc_verif_0 = lora_sdr.crc_verif( 1, False)
+        self.lora_sdr_crc_verif_0_1 = lora_sdr.crc_verif( 2, False)
+        self.lora_sdr_crc_verif_0_0_1 = lora_sdr.crc_verif( 2, False)
+        self.lora_sdr_crc_verif_0_0_0_0 = lora_sdr.crc_verif( 2, False)
+        self.lora_sdr_crc_verif_0_0_0 = lora_sdr.crc_verif( 2, False)
+        self.lora_sdr_crc_verif_0_0 = lora_sdr.crc_verif( 2, False)
+        self.lora_sdr_crc_verif_0 = lora_sdr.crc_verif( 2, False)
         self.blocks_multiply_xx_0_0_0 = blocks.multiply_vcc(1)
         self.blocks_multiply_xx_0_0_0.set_min_output_buffer(65568)
         self.blocks_multiply_xx_0_0 = blocks.multiply_vcc(1)
@@ -466,8 +466,6 @@ class lora_b210(gr.top_block, Qt.QWidget):
         self.analog_sig_source_x_0.set_sampling_freq(self.samp_rate)
         self.analog_sig_source_x_0_0.set_sampling_freq(self.samp_rate)
         self.analog_sig_source_x_0_1.set_sampling_freq(self.samp_rate)
-        self.uhd_usrp_sink_0.set_samp_rate(self.samp_rate)
-        self.uhd_usrp_sink_0_0.set_samp_rate(self.samp_rate)
         self.uhd_usrp_source_0.set_samp_rate(self.samp_rate)
 
     def get_pay_len(self):

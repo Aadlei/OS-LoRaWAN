@@ -10,9 +10,11 @@ import threading
 import logging
 import queue
 import xmlrpc.client
-
+from google.protobuf.internal.decoder import _DecodeVarint32
+from chirpstack_api.common import common_pb2
+from chirpstack_api.gw import gw_pb2
 # Enable or disable debug console
-Debug_Console = False
+Debug_Console = True
 
 # Initialize counter variables
 Count_1, Count_2, Count_3, Count_4, Count_5, Count_6 = 0,0,0,0,0,0
@@ -52,47 +54,47 @@ sock2.bind("tcp://127.0.0.1:5554")
 
 # Function to send LoRa message
 def send_message_lora(phyPayload, delay, frequency, spreadingfactor):
-    Delay_offset_Sf7 = 0.196 #Delay for SF7
-    Delay_offset_Sf12 = 0.155 #Delay for SF12
+	Delay_offset_Sf7 = 0.196 #Delay for SF7 
+	Delay_offset_Sf12 = 0.155 #Delay for SF12
 
-    # Initialize the list with your elements
-    counts = [Count_1, Count_2, Count_3, Count_4, Count_5, Count_6]
+	# Initialize the list with your elements
+	counts = [Count_1, Count_2, Count_3, Count_4, Count_5, Count_6]
 
-    # Find the index of the largest element
-    max_index = counts.index(max(counts))
+	# Find the index of the largest element
+	max_index = counts.index(max(counts))
 
-    formatt = base64.b64decode(phyPayload).hex()
-    formatted = formatt + ','
+	formatt = base64.b64decode(phyPayload).hex()
+	formatted = formatt + ','
+	
+	# Set the frequency variable
+	server.set_sink_freq2(frequency)
 
-    # Set the frequency variable
-    server.set_sink_freq2(frequency)
+	end_time = time.perf_counter_ns()
+	elapsed_time_ns = end_time - counts[max_index]
+	elapsed_time_s = elapsed_time_ns / 1_000_000_000
+	if Debug_Console == True:
+		logging.debug(f"Elapsed time: {elapsed_time_s:.6f} seconds")
 
-    end_time = time.perf_counter_ns()
-    elapsed_time_ns = end_time - counts[max_index]
-    elapsed_time_s = elapsed_time_ns / 1_000_000_000
-    if Debug_Console == True:
-        logging.debug(f"Elapsed time: {elapsed_time_s:.6f} seconds")
+	if spreadingfactor == 12:
+		delay = int(delay) - Delay_offset_Sf12 - elapsed_time_s
+		time.sleep(delay)
+		sock2.send(bytes(formatted, encoding='utf-8'))
+	
+	if spreadingfactor == 7: 
+		delay = int(delay) - Delay_offset_Sf7 - elapsed_time_s
+		time.sleep(delay)
+		
+		#Experimental
+		print("SF7 - Waiting: ", delay)
+		for x in range(5):
+			time.sleep(0.02)
+			sock.send(bytes(formatted, encoding='utf-8'))	
 
-    if spreadingfactor == 12:
-        delay = int(delay) - Delay_offset_Sf12 - elapsed_time_s
-        time.sleep(delay)
-        sock2.send(bytes(formatted, encoding='utf-8'))
+	print(f"{bcolors.OKBLUE}\nSending packet to GNURadio{bcolors.ENDC}")
+	print(f"{bcolors.WARNING}	PHYPayload: {bcolors.ENDC}", phyPayload, "\n")
+	print(f"{bcolors.WARNING}	Delay: {bcolors.ENDC}{delay:.4f}{bcolors.WARNING} - Frequency: {bcolors.ENDC}{frequency}{bcolors.WARNING} - SF: {bcolors.ENDC}{spreadingfactor}")
 
-    if spreadingfactor == 7:
-        delay = int(delay) - Delay_offset_Sf7 - elapsed_time_s
-        time.sleep(delay)
-
-        #Experimental
-        print("SF7 - Waiting: ", delay)
-        for x in range(5):
-            time.sleep(0.02)
-            sock.send(bytes(formatted, encoding='utf-8'))
-
-    print(f"{bcolors.OKBLUE}\nSending packet to GNURadio{bcolors.ENDC}")
-    print(f"{bcolors.WARNING}	PHYPayload: {bcolors.ENDC}", phyPayload, "\n")
-    print(f"{bcolors.WARNING}	Delay: {bcolors.ENDC}{delay:.4f}{bcolors.WARNING} - Frequency: {bcolors.ENDC}{frequency}{bcolors.WARNING} - SF: {bcolors.ENDC}{spreadingfactor}")
-
-# Mqtt from ChirpStack
+# Mqtt from chirpstack		
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
         print(f"{bcolors.OKGREEN} Connected to broker{bcolors.ENDC}")
@@ -103,27 +105,29 @@ def on_connect(client, userdata, flags, rc):
 
 # Function to deconstruct received message and call send_message_lora
 def deconstruct_message(message_payload):
-    data = json.loads(message_payload)
-
-    phyPayload = data['items'][0]['phyPayload']
     try:
-        delay = data['items'][0]['txInfoLegacy']['delayTimingInfo']['delay']
-        delay = delay[0]
-    except:
-        delay = 2
-
-    try:
-        frequency = data['items'][0]['txInfoLegacy']['frequency']
-    except:
-        frequency = 868100000
-
-    try:
-        spreadingfactor = data['items'][0]['txInfoLegacy']['loraModulationInfo']['spreadingFactor']
-    except:
-        spreadingfactor = 12
-
-    return send_message_lora(phyPayload, delay, frequency, spreadingfactor)
-
+        from chirpstack_api.gw import gw_pb2
+        
+        # Parse the downlink frame
+        downlink = gw_pb2.DownlinkFrame()
+        downlink.ParseFromString(message_payload)
+        
+        for item in downlink.items:
+            phy_payload = base64.b64encode(item.phy_payload).decode()
+            frequency = item.tx_info.frequency / 1000000  # Convert Hz to MHz
+            delay = item.tx_info.timing.delay.delay.seconds
+            sf = item.tx_info.modulation.lora.spreading_factor
+            
+            send_message_lora(
+                phy_payload,
+                delay,
+                frequency,
+                sf
+            )
+        
+    except Exception as e:
+        print(f"Decoding error: {e}")
+        return
 # Function to handle MQTT message
 def on_message(client, userdata, message):
     deconstruct_message(message.payload)
@@ -255,6 +259,39 @@ def listener6():
         Count_6 = time.perf_counter_ns()
         process_thread = threading.Thread(target=send_packet_network, args=(data, freq, sf))
         process_thread.start()
+
+def decode_protobuf_message(payload):
+    """Decode protobuf message from Chirpstack gateway command"""
+    message = gw_pb2.DownlinkFrame()
+    message.ParseFromString(payload)
+    return message
+
+def extract_timing_info(message):
+    """Extract timing information from the message"""
+    if message.HasField('timing_info'):
+        delay = message.timing_info.delay.seconds + (message.timing_info.delay.nanos / 1e9)
+    else:
+        delay = 0
+    return delay
+
+def extract_frequency(message):
+    """Extract frequency from the message"""
+    if len(message.items) > 0:
+        return message.items[0].tx_info.frequency
+    return 0
+
+def extract_spreading_factor(message):
+    """Extract spreading factor from the message"""
+    if len(message.items) > 0:
+        lora_modulation = message.items[0].tx_info.modulation.parameters
+        return lora_modulation.spreading_factor
+    return 0
+
+def extract_phy_payload(message):
+    """Extract PHY payload from the message"""
+    if len(message.items) > 0:
+        return base64.b64encode(message.items[0].phy_payload).decode()
+    return None
 
 Connected = False
 
