@@ -345,7 +345,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [376, 1220.0]
+    coordinate: [592, 1028.0]
     rotation: 0
     state: enabled
 - name: blocks_multiply_xx_0_0
@@ -2906,7 +2906,7 @@ blocks:
     bw7: '0'
     bw8: '0'
     bw9: '0'
-    center_freq0: center_freq
+    center_freq0: sink_freq2
     center_freq1: '0'
     center_freq10: '0'
     center_freq11: '0'
@@ -3084,7 +3084,7 @@ blocks:
     nchan: '1'
     num_mboards: '1'
     otw: ''
-    samp_rate: '500000'
+    samp_rate: '100000'
     sd_spec0: ''
     sd_spec1: ''
     sd_spec2: ''
@@ -3097,7 +3097,7 @@ blocks:
     start_time: '-1.0'
     stream_args: ''
     stream_chans: '[]'
-    sync: sync
+    sync: none
     time_source0: ''
     time_source1: ''
     time_source2: ''
@@ -3183,7 +3183,7 @@ blocks:
     bw7: '0'
     bw8: '0'
     bw9: '0'
-    center_freq0: center_freq
+    center_freq0: sink_freq2
     center_freq1: '0'
     center_freq10: '0'
     center_freq11: '0'
@@ -3361,7 +3361,7 @@ blocks:
     nchan: '1'
     num_mboards: '1'
     otw: ''
-    samp_rate: '500000'
+    samp_rate: '100000'
     sd_spec0: ''
     sd_spec1: ''
     sd_spec2: ''

@@ -123,10 +123,10 @@ class lora_b210(gr.top_block, Qt.QWidget):
             ),
             "",
         )
-        self.uhd_usrp_sink_0_0.set_samp_rate(500000)
+        self.uhd_usrp_sink_0_0.set_samp_rate(100000)
         self.uhd_usrp_sink_0_0.set_time_unknown_pps(uhd.time_spec(0))
 
-        self.uhd_usrp_sink_0_0.set_center_freq(center_freq, 0)
+        self.uhd_usrp_sink_0_0.set_center_freq(sink_freq2, 0)
         self.uhd_usrp_sink_0_0.set_antenna("TX/RX", 0)
         self.uhd_usrp_sink_0_0.set_bandwidth(125e3, 0)
         self.uhd_usrp_sink_0_0.set_gain(40, 0)
@@ -139,10 +139,10 @@ class lora_b210(gr.top_block, Qt.QWidget):
             ),
             "",
         )
-        self.uhd_usrp_sink_0.set_samp_rate(500000)
-        self.uhd_usrp_sink_0.set_time_unknown_pps(uhd.time_spec(0))
+        self.uhd_usrp_sink_0.set_samp_rate(100000)
+        # No synchronization enforced.
 
-        self.uhd_usrp_sink_0.set_center_freq(center_freq, 0)
+        self.uhd_usrp_sink_0.set_center_freq(sink_freq2, 0)
         self.uhd_usrp_sink_0.set_antenna("TX/RX", 0)
         self.uhd_usrp_sink_0.set_bandwidth(125e3, 0)
         self.uhd_usrp_sink_0.set_gain(40, 0)
@@ -447,6 +447,8 @@ class lora_b210(gr.top_block, Qt.QWidget):
 
     def set_sink_freq2(self, sink_freq2):
         self.sink_freq2 = sink_freq2
+        self.uhd_usrp_sink_0.set_center_freq(self.sink_freq2, 0)
+        self.uhd_usrp_sink_0_0.set_center_freq(self.sink_freq2, 0)
 
     def get_sf(self):
         return self.sf
@@ -505,8 +507,6 @@ class lora_b210(gr.top_block, Qt.QWidget):
         self.center_freq = center_freq
         self.qtgui_freq_sink_x_0_1.set_frequency_range(self.center_freq, 2000000)
         self.qtgui_waterfall_sink_x_0.set_frequency_range(self.center_freq, 2000000)
-        self.uhd_usrp_sink_0.set_center_freq(self.center_freq, 0)
-        self.uhd_usrp_sink_0_0.set_center_freq(self.center_freq, 0)
         self.uhd_usrp_source_0.set_center_freq(self.center_freq, 0)
 
     def get_bw(self):
