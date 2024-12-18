@@ -25,7 +25,7 @@ class Colors:
     BOLD = '\033[1m'
 
 # Initialize counters for message timing
-Count_1, Count_2, Count_3 = 0, 0, 0
+Count_1, Count_2, Count_3, Count_4, Count_5, Count_6 = 0, 0, 0, 0, 0, 0
 
 server = xmlrpc.client.ServerProxy("http://localhost:8089/RPC2")
 
@@ -36,8 +36,9 @@ tx_sock2 = context.socket(zmq.PUSH)
 tx_sock2.bind("tcp://127.0.0.1:5554")
 
 def send_message_lora(phyPayload, delay, frequency, spreadingfactor):
-    Delay_offset_Sf12 = 2.11
-    counts = [Count_1, Count_2, Count_3]
+    Delay_offset_Sf12 = 2.5
+    Delay_offset_Sf7 = 2.18
+    counts = [Count_1, Count_2, Count_3, Count_4, Count_5, Count_6]
     max_index = counts.index(max(counts))
     
     formatted = base64.b64decode(phyPayload).hex() + ','
@@ -46,11 +47,14 @@ def send_message_lora(phyPayload, delay, frequency, spreadingfactor):
     elapsed_time_ns = end_time - counts[max_index]
     elapsed_time_s = elapsed_time_ns / 1_000_000_000
     server.set_sink_freq(frequency)  # Convert MHz to Hz
-    if spreadingfactor == 7:
+    if spreadingfactor == 12:
         delay = int(delay) - Delay_offset_Sf12 - elapsed_time_s
-        time.sleep(delay)
-        tx_sock2.send(formatted.encode())
-        logging.info(f"Sent LoRa message: SF{spreadingfactor}, {(frequency/1e6)}MHz, delay={delay:.4f}")
+    if spreadingfactor == 7:
+        delay = int(delay) - Delay_offset_Sf7 - elapsed_time_s
+        
+    time.sleep(delay)
+    tx_sock2.send(formatted.encode())
+    logging.info(f"Sent LoRa message: SF{spreadingfactor}, {(frequency/1e6)}MHz, delay={delay:.4f}")
 
 def send_packet_network(data, freq, sf):
     try:
@@ -85,7 +89,7 @@ def send_packet_network(data, freq, sf):
         logging.error(f"Error sending packet: {e}")
 
 # Listener threads
-def create_listener(freq, port, count_var):
+def create_listener(freq, sf, port, count_var):
     def listener():
         rx_sock = context.socket(zmq.PULL)
         rx_sock.connect(f"tcp://127.0.0.1:{port}")
@@ -93,7 +97,7 @@ def create_listener(freq, port, count_var):
             try:
                 data = rx_sock.recv()
                 globals()[count_var] = time.perf_counter_ns()
-                thread = threading.Thread(target=send_packet_network, args=(data, freq, 7))
+                thread = threading.Thread(target=send_packet_network, args=(data, freq, sf))
                 thread.start()
             except Exception as e:
                 logging.error(f"Listener error: {e}")
@@ -125,20 +129,23 @@ def on_message(client, userdata, message):
 def main():
     # Set up listener threads
     listener_configs = [
-        (868.1, 5556, 'Count_1'),
-        (868.3, 5557, 'Count_2'),
-        (868.5, 5558, 'Count_3')
+        (868.1, 12, 5556, 'Count_1'),
+        (868.3, 12, 5557, 'Count_2'),
+        (868.5, 12, 5558, 'Count_3'),
+        (868.1, 7, 5559, 'Count_4'),
+        (868.3, 7, 5560, 'Count_5'),
+        (868.5, 7, 5561, 'Count_6')
     ]
 
     threads = []
-    for freq, port, count_var in listener_configs:
+    for freq, sf, port, count_var in listener_configs:
         thread = threading.Thread(
-            target=create_listener(freq, port, count_var),
+            target=create_listener(freq, sf, port, count_var),
             daemon=True
         )
         thread.start()
         threads.append(thread)
-        logging.info(f"Started listener: {freq}MHz SF12")
+        logging.info(f"Started listener: {freq}MHz SF{sf}")
 
     # MQTT setup
     client = mqttClient.Client(client_id="SDR", callback_api_version=mqttClient.CallbackAPIVersion.VERSION1)
