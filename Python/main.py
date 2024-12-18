@@ -32,6 +32,9 @@ server = xmlrpc.client.ServerProxy("http://localhost:8089/RPC2")
 context = zmq.Context()
 
 # TX sockets
+tx_sock = context.socket(zmq.PUSH)
+tx_sock.bind("tcp://127.0.0.1:5555")
+
 tx_sock2 = context.socket(zmq.PUSH)
 tx_sock2.bind("tcp://127.0.0.1:5554")
 
@@ -47,13 +50,16 @@ def send_message_lora(phyPayload, delay, frequency, spreadingfactor):
     elapsed_time_ns = end_time - counts[max_index]
     elapsed_time_s = elapsed_time_ns / 1_000_000_000
     server.set_sink_freq(frequency)  # Convert MHz to Hz
-    if spreadingfactor == 12:
-        delay = int(delay) - Delay_offset_Sf12 - elapsed_time_s
     if spreadingfactor == 7:
         delay = int(delay) - Delay_offset_Sf7 - elapsed_time_s
+        time.sleep(delay)
+        tx_sock.send(formatted.encode())
+    if spreadingfactor == 12:
+        delay = int(delay) - Delay_offset_Sf12 - elapsed_time_s
+        time.sleep(delay)
+        tx_sock2.send(formatted.encode())
+    
         
-    time.sleep(delay)
-    tx_sock2.send(formatted.encode())
     logging.info(f"Sent LoRa message: SF{spreadingfactor}, {(frequency/1e6)}MHz, delay={delay:.4f}")
 
 def send_packet_network(data, freq, sf):
