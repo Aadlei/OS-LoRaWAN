@@ -39,8 +39,8 @@ tx_sock2 = context.socket(zmq.PUSH)
 tx_sock2.bind("tcp://127.0.0.1:5554")
 
 def send_message_lora(phyPayload, delay, frequency, spreadingfactor):
-    Delay_offset_Sf12 = 2.5
-    Delay_offset_Sf7 = 2.18
+    Delay_offset_Sf12 = 2.1
+    Delay_offset_Sf7 = 2.05
     counts = [Count_1, Count_2, Count_3, Count_4, Count_5, Count_6]
     max_index = counts.index(max(counts))
     
