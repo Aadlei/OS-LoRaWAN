@@ -2,7 +2,7 @@
 <Configuration status="info">
     <ThresholdFilter level="INFO"/>
     <Appenders>
-        <RollingFile name="DEBUGFILE" fileName="C:/Users/aadne/master/OS-LoRaWAN/LoRaWAN_End_Node/.metadata/.ide.log" filePattern="C:/Users/aadne/master/OS-LoRaWAN/LoRaWAN_End_Node/.metadata/.ide.log-%d{yyyy-MM-dd}.log">
+        <RollingFile name="DEBUGFILE" fileName="C:/Users/gusta/STM32CubeIDE/workspace_1.16.0/.metadata/.ide.log" filePattern="C:/Users/gusta/STM32CubeIDE/workspace_1.16.0/.metadata/.ide.log-%d{yyyy-MM-dd}.log">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} [%p] %c{1}:%L - %m%n" />
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1" modulate="true" />

@@ -45,7 +45,7 @@ extern "C" {
 /*!
  * CAYENNE_LPP is myDevices Application server.
  */
-/*#define CAYENNE_LPP*/
+#define CAYENNE_LPP
 
 /*!
  * Defines the application data transmission duty cycle. 10s, value in [ms].
@@ -67,12 +67,12 @@ extern "C" {
 /*!
  * LoRaWAN default endNode class port
  */
-#define LORAWAN_DEFAULT_CLASS                       CLASS_C
+#define LORAWAN_DEFAULT_CLASS                       CLASS_A
 
 /*!
  * LoRaWAN default confirm state
  */
-#define LORAWAN_DEFAULT_CONFIRMED_MSG_STATE         LORAMAC_HANDLER_CONFIRMED_MSG
+#define LORAWAN_DEFAULT_CONFIRMED_MSG_STATE         LORAMAC_HANDLER_UNCONFIRMED_MSG
 
 /*!
  * LoRaWAN Adaptive Data Rate
@@ -84,7 +84,8 @@ extern "C" {
  * LoRaWAN Default data Rate Data Rate
  * @note Please note that LORAWAN_DEFAULT_DATA_RATE is used only when LORAWAN_ADR_STATE is disabled
  */
-#define LORAWAN_DEFAULT_DATA_RATE                   DR_0
+//#define LORAWAN_DEFAULT_DATA_RATE                   DR_0 // First device
+#define LORAWAN_DEFAULT_DATA_RATE                   DR_5 // Second device
 
 /*!
  * LoRaWAN default activation type

@@ -315,17 +315,6 @@ static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params)
   /* USER CODE BEGIN OnRxData_1 */
   if ((appData != NULL) || (params != NULL))
   {
-	APP_LOG(TS_OFF, VLEVEL_M, "Hex data is: ");
-
-	  for (int i = 0; i < appData->BufferSize; ++i)
-	  {
-		APP_LOG(TS_OFF, VLEVEL_M, " %d ", appData->Buffer[i]);
-	  }
-	  APP_LOG(TS_OFF, VLEVEL_M, "\nRssi: ");
-	  APP_LOG(TS_OFF, VLEVEL_M, " %d ", params->Rssi);
-	  APP_LOG(TS_OFF, VLEVEL_M, "\nSnr: ");
-	  APP_LOG(TS_OFF, VLEVEL_M, " %d ", params->Snr);
-
     LED_On(LED_BLUE);
 
     UTIL_TIMER_Start(&RxLedTimer);

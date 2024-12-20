@@ -95,44 +95,49 @@ extern "C" {
 /*!
  * end-device IEEE EUI (big endian)
  */
-#define LORAWAN_DEVICE_EUI                                 { 0x12, 0x80, 0xE1, 0x01, 0x01, 0x12, 0x01, 0x02 }
+//#define LORAWAN_DEVICE_EUI                                 { 0xF0, 0xCF, 0xE5, 0x65, 0xEF, 0xE4, 0x57, 0xB1 } // First device
+#define LORAWAN_DEVICE_EUI                                 { 0xC1, 0x0F, 0xA6, 0xF5, 0xF6, 0x7A, 0x26, 0xFA } // Second device
 
 /*!
  * App/Join server IEEE EUI (big endian)
  */
-#define LORAWAN_JOIN_EUI                                   { 0x11, 0x01, 0x01, 0x01, 0x13, 0x01, 0x11, 0x01 }
+//#define LORAWAN_JOIN_EUI                                   { 0xCF, 0x94, 0xA5, 0x6C, 0xAB, 0xEF, 0x92, 0xDC } // First device
+#define LORAWAN_JOIN_EUI                                   { 0xB0, 0x7D, 0x26, 0xFB, 0x03, 0x27, 0xB8, 0xD6 } // Second device
 
 /*!
  * When set to 1 DevAddr is LORAWAN_DEVICE_ADDRESS
  * When set to 0 DevAddr is automatically set with a value provided by a pseudo
  *      random generator seeded with a value provided by the MCU platform
  */
-#define STATIC_DEVICE_ADDRESS                              0
+#define STATIC_DEVICE_ADDRESS                              1
 
 /*!
  * Device address on the network (big endian)
  */
-#define LORAWAN_DEVICE_ADDRESS                             ( uint32_t )0x0100000A
+//#define LORAWAN_DEVICE_ADDRESS                             ( uint32_t )0x01DA5432 // First device
+#define LORAWAN_DEVICE_ADDRESS                             ( uint32_t )0x01DD7E2A // Second device
 
 /*!
  * Application root key
  */
-#define LORAWAN_APP_KEY                                    6d,3c,04,72,a4,08,6c,ae,38,64,75,a7,c0,38,5a,4a
+//#define LORAWAN_APP_KEY                                    58,2A,21,26,64,FD,84,4E,49,C6,8B,FA,83,6E,C5,37 // First device
+#define LORAWAN_APP_KEY                                    C7,8C,63,AC,F1,70,6F,C5,A0,1D,04,A8,53,29,96,93 // Second device
 
 /*!
  * Network root key
  */
-#define LORAWAN_NWK_KEY                                    6d,3c,04,72,a4,08,6c,ae,38,64,75,a7,c0,38,5a,4a
+//#define LORAWAN_NWK_KEY                                    58,2A,21,26,64,FD,84,4E,49,C6,8B,FA,83,6E,C5,37 // First device
+#define LORAWAN_NWK_KEY                                    0D,C5,A3,96,44,D8,A8,E6,1F,CA,F9,84,B5,45,4E,D4 // Second device
 
 /*!
  * Forwarding Network session key
  */
-#define LORAWAN_NWK_S_KEY                                  6d,3c,04,72,a4,08,6c,ae,38,64,75,a7,c0,38,5a,4a
+#define LORAWAN_NWK_S_KEY                                  2B,7E,15,16,28,AE,D2,A6,AB,F7,15,88,09,CF,4F,3C
 
 /*!
  * Application session key
  */
-#define LORAWAN_APP_S_KEY                                  6d,3c,04,72,a4,08,6c,ae,38,64,75,a7,c0,38,5a,4a
+#define LORAWAN_APP_S_KEY                                  2B,7E,15,16,28,AE,D2,A6,AB,F7,15,88,09,CF,4F,3C
 
 /*!
  * Format commissioning keys
